@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="theme-color" content="#1A1AFF"/>
+		<meta name="Description" content="A test of my first PWA.">
+		<title>Progressive Web App</title>
+		<link rel="icon" sizes="192x192" href="Logo-192x192.png" type="image/png"/>
+		
+		<!-- For generating app manifest: https://tomitm.github.io/appmanifest/ -->
+		<link rel="manifest" href="manifest.json">
+		
+		<script type="text/javascript" async>
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+function fetchInto (page, id) {
+	console.log("Fetching content: " + page);
+	fetch(page).then((response) => (response.text())).then((html) => {
+		document.getElementById(id).innerHTML = html;
+		console.log("Content Loaded.");
+	}).catch((error) => {
+		console.log(error);
+	});
+}
+
+// Inspect me @: chrome://inspect/#service-workers
+if ('serviceWorker' in navigator) {
+	window.addEventListener('load', function() {
+		navigator.serviceWorker.register('sw.js').then(function(registration) {
+			console.log('ServiceWorker registration successful with scope: ', registration.scope);
+			
+			fetchInto("main.htm", "main");		
+		}, function(err) {
+			console.log('ServiceWorker registration failed: ', err);
+		});
+	});
+}
+		</script>
+		
+		<script type="text/javascript" src="script/main.js" async></script>
+	</head>
+	<body>
+		<div id="main">
+			Loading...
+		</div>
+	</body>
+</html>
